@@ -1,0 +1,120 @@
+Inverting color...
+bmp file size:   512x512
+matrix size:     256x512
+Invert Successfully! Z:/MA/1/Data/inverse/4bit_16color/shape.bmp
+---------------------------------------------------------------------
+Inverting color...
+bmp file size:   512x512
+matrix size:     256x512
+Invert Successfully! Z:/MA/1/Data/inverse/4bit_16color/shape.bmp
+---------------------------------------------------------------------
+Converting 256 color bmp to 32bit bmp...
+bmp file size:   512x512
+matrix size:     512x512
+Convert Successfully! Z:/MA/1/Data/convert/8bit_to_32bit/shape.bmp
+---------------------------------------------------------------------
+here
+Converting 256 color bmp to 32bit bmp...
+bmp file size:   2553x1999
+matrix size:     2556x1999
+Convert Successfully! Z:/MA/1/Data/convert/8bit_to_32bit/crystal.bmp
+---------------------------------------------------------------------
+Converting 256 color bmp to 32bit bmp...
+bmp file size:   2553x1999
+matrix size:     2556x1999
+Convert Successfully! Z:/MA/1/Data/convert/8bit_to_32bit/crystal_x.bmp
+---------------------------------------------------------------------
+Inverting color...
+bmp file size:   512x512
+matrix size:     512x512
+Invert Successfully! Z:/MA/1/Data/inverse/8bit_256color/shape.bmp
+---------------------------------------------------------------------
+Inverting color...
+bmp file size:   2553x1999
+matrix size:     2556x1999
+Invert Successfully! Z:/MA/1/Data/inverse/8bit_256color/crystal.bmp
+---------------------------------------------------------------------
+Inverting color...
+bmp file size:   2553x1999
+matrix size:     2556x1999
+Invert Successfully! Z:/MA/1/Data/inverse/8bit_256color/crystal_x.bmp
+---------------------------------------------------------------------
+Inverting color...
+bmp file size:   1000x1000
+matrix size:     1000x1000
+Invert Successfully! Z:/MA/1/Data/inverse/8bit_256color/landscape.bmp
+---------------------------------------------------------------------
+Inverting color...
+bmp file size:   512x512
+matrix size:     1536x512
+Invert Successfully! Z:/MA/1/Data/inverse/24bit_trueColor/shape.bmp
+---------------------------------------------------------------------
+Inverting color...
+bmp file size:   2553x1999
+matrix size:     7660x1999
+Invert Successfully! Z:/MA/1/Data/inverse/24bit_trueColor/crystal.bmp
+---------------------------------------------------------------------
+Inverting color...
+bmp file size:   1000x1000
+matrix size:     3000x1000
+Invert Successfully! Z:/MA/1/Data/inverse/24bit_trueColor/landscape.bmp
+---------------------------------------------------------------------
+Inverting color...
+bmp file size:   1000x1000
+matrix size:     1000x1000
+Invert Successfully! Z:/MA/1/Data/inverse/8bit_256color/landscape.bmp
+---------------------------------------------------------------------
+Inverting color...
+bmp file size:   1000x1000
+matrix size:     3000x1000
+Invert Successfully! Z:/MA/1/Data/inverse/24bit_trueColor/landscape.bmp
+---------------------------------------------------------------------
+bmp file size:   512x512
+matrix size:     1536x512
+time consuming:
+        read file:              0.003
+        sort clrBuf:            0.001
+        count every color:      0.001
+        sort clrCountVec:       0.000
+        xxxxxxxxxxx:            0.000
+        calc error:             0.004
+        calc index:             0.001
+        write to file:          0.002
+        -----------------------------
+        Total time-consuming:   0.012   **
+-------------------------------------
+Convert Successfully! Z:/MA/1/Data/convert/24bit_to_8bit/shape.bmp
+---------------------------------------------------------------------
+bmp file size:   2553x1999
+matrix size:     7660x1999
+time consuming:
+        read file:              0.081
+        sort clrBuf:            0.079
+        count every color:      0.004
+        sort clrCountVec:       0.000
+        xxxxxxxxxxx:            0.001
+        calc error:             0.007
+        calc index:             0.013
+        write to file:          0.014
+        -----------------------------
+        Total time-consuming:   0.204   **
+-------------------------------------
+Convert Successfully! Z:/MA/1/Data/convert/24bit_to_8bit/crystal.bmp
+---------------------------------------------------------------------
+bmp file size:   1000x1000
+matrix size:     3000x1000
+time consuming:
+        read file:              0.015
+        sort clrBuf:            0.020
+        count every color:      0.001
+        sort clrCountVec:       0.000
+        xxxxxxxxxxx:            0.000
+        calc error:             0.005
+        calc index:             0.002
+        write to file:          0.004
+        -----------------------------
+        Total time-consuming:   0.048   **
+-------------------------------------
+Convert Successfully! Z:/MA/1/Data/convert/24bit_to_8bit/landscape.bmp
+---------------------------------------------------------------------
+Press any key to continue . . .
