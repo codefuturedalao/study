@@ -37,8 +37,8 @@ bool BmpRead(FILE* fp, BITMAPFILEHEADER* bmpFileHeader, BITMAPINFOHEADER* bmpInf
 				*clrTab = new uchar[64];
 			fread(*clrTab, 1, 64, fp);
 		} else {
-			uchar tempClrTab[1024];
-			fread(tempClrTab, 1, 1024, fp);
+			uchar tempClrTab[64];
+			fread(tempClrTab, 1, 64, fp);
 		}
 
 		if (mtxWidth)
