@@ -41,25 +41,28 @@ bool BmpRead(FILE* fp, BITMAPFILEHEADER* bmpFileHeader, BITMAPINFOHEADER* bmpInf
 			fread(tempClrTab, 1, 64, fp);
 		}
 
+		uint mtxWidth_ = bmpWidth % 2 == 0 ?
+			(bmpWidth / 2 + 3) / 4 * 4
+			: (bmpWidth / 2 + 4) / 4 * 4;
+		uint mtxHeight_ = bmpHeight;
+
 		if (mtxWidth)
-			*mtxWidth = bmpWidth % 2 == 0 ?
-				(bmpWidth / 2 + 3) / 4 * 4
-				: (bmpWidth / 2 + 4) / 4 * 4;
+			*mtxWidth = mtxWidth_;
 		if (mtxHeight)
-			*mtxHeight = bmpHeight;
+			*mtxHeight = mtxHeight_;
 
 		if (!mtxBuf)
 			break;
 
 		// 读取像素矩阵
-		lineBuf = new uchar[*mtxWidth];	// 行缓冲
+		lineBuf = new uchar[mtxWidth_];	// 行缓冲
 		if (!(*mtxBuf))
-			*mtxBuf = new uchar*[*mtxHeight];	// 像素矩阵（包括补零）
+			*mtxBuf = new uchar*[mtxHeight_];	// 像素矩阵（包括补零）
 
-		for (uint i = 0; i < *mtxHeight; ++i) {
-			fread(lineBuf, sizeof(uchar), *mtxWidth, fp);
-			(*mtxBuf)[i] = new uchar[*mtxWidth];
-			for (uint j = 0; j < *mtxWidth; ++j) {
+		for (uint i = 0; i < mtxHeight_; ++i) {
+			fread(lineBuf, sizeof(uchar), mtxWidth_, fp);
+			(*mtxBuf)[i] = new uchar[mtxWidth_];
+			for (uint j = 0; j < mtxWidth_; ++j) {
 				((*mtxBuf)[i])[j] = lineBuf[j];
 			}
 		}
@@ -80,24 +83,27 @@ bool BmpRead(FILE* fp, BITMAPFILEHEADER* bmpFileHeader, BITMAPINFOHEADER* bmpInf
 			fread(tempClrTab, 1, 1024, fp);
 		}
 
+		uint mtxWidth_ = (bmpWidth + 3) / 4 * 4;
+		uint mtxHeight_ = bmpHeight;
+
 		if (mtxWidth)
-			*mtxWidth = (bmpWidth + 3) / 4 * 4;
+			*mtxWidth = mtxWidth_;
 		if (mtxHeight)
-			*mtxHeight = bmpHeight;
+			*mtxHeight = mtxHeight_;
 
 		if (!mtxBuf)
 			break;
 
-		lineBuf = new uchar[*mtxWidth];	// 行缓冲
+		lineBuf = new uchar[mtxWidth_];	// 行缓冲
 		if (mtxBuf && !(*mtxBuf))
-			*mtxBuf = new uchar*[*mtxHeight];	// 像素矩阵（包括补零）
+			*mtxBuf = new uchar*[mtxHeight_];	// 像素矩阵（包括补零）
 
-		for (uint i = 0; i < *mtxHeight; ++i) {
+		for (uint i = 0; i < mtxHeight_; ++i) {
 			// 行缓冲
-			fread(lineBuf, sizeof(uchar), *mtxWidth, fp);
-			(*mtxBuf)[i] = new uchar[*mtxWidth];
+			fread(lineBuf, sizeof(uchar), mtxWidth_, fp);
+			(*mtxBuf)[i] = new uchar[mtxWidth_];
 			// 像素区域
-			for (uint j = 0; j < *mtxWidth; ++j) {
+			for (uint j = 0; j < mtxWidth_; ++j) {
 				((*mtxBuf)[i])[j] = lineBuf[j];
 			}
 		}
@@ -107,23 +113,26 @@ bool BmpRead(FILE* fp, BITMAPFILEHEADER* bmpFileHeader, BITMAPINFOHEADER* bmpInf
 		break;
 	case 24:
 	{
+		uint mtxWidth_ = (bmpWidth * 3 + 3) / 4 * 4;
+		uint mtxHeight_ = bmpHeight;
+
 		if (mtxWidth)
-			*mtxWidth = (bmpWidth * 3 + 3) / 4 * 4;
+			*mtxWidth = mtxWidth_;
 		if (mtxHeight)
-			*mtxHeight = bmpHeight;
+			*mtxHeight = mtxHeight_;
 
 		if (!mtxBuf)
 			break;
 
-		lineBuf = new uchar[*mtxWidth];	// 行缓冲
+		lineBuf = new uchar[mtxWidth_];	// 行缓冲
 		if (!(*mtxBuf))
-			*mtxBuf = new uchar*[*mtxHeight];	// 像素矩阵
+			*mtxBuf = new uchar*[mtxHeight_];	// 像素矩阵
 
 		// 读取数据并反色处理
-		for (uint i = 0; i < *mtxHeight; ++i) {
-			fread(lineBuf, sizeof(uchar), *mtxWidth, fp);
-			(*mtxBuf)[i] = new uchar[*mtxWidth];
-			for (uint j = 0; j < *mtxWidth; ++j) {
+		for (uint i = 0; i < mtxHeight_; ++i) {
+			fread(lineBuf, sizeof(uchar), mtxWidth_, fp);
+			(*mtxBuf)[i] = new uchar[mtxWidth_];
+			for (uint j = 0; j < mtxWidth_; ++j) {
 				((*mtxBuf)[i])[j] = lineBuf[j];
 			}
 		}
