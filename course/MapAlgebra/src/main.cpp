@@ -1,3 +1,4 @@
+
 #include "MA1.h"
 
 #include <cstdio>
@@ -14,15 +15,11 @@ int main() {
 	Bmp256ColorTo32Bit("Z:/MA/1/Data/convert/8bit_to_32bit/shape.bmp",
 		"Z:/MA/1/Data/convert/8bit_to_32bit/shape_convert.bmp");
 
-	printf("here\n");
-
 	Bmp256ColorTo32Bit("Z:/MA/1/Data/convert/8bit_to_32bit/crystal.bmp",
 		"Z:/MA/1/Data/convert/8bit_to_32bit/crystal_convert.bmp");
 
 	Bmp256ColorTo32Bit("Z:/MA/1/Data/convert/8bit_to_32bit/crystal_x.bmp",
 		"Z:/MA/1/Data/convert/8bit_to_32bit/crystal_x_convert.bmp");
-
-	//return 0;
 
 	/******************************************** 反色处理 *****************************************************/
 

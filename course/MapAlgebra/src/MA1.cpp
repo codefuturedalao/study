@@ -3,22 +3,24 @@
 
 #include <cstdio>
 #include <ctime>
-
 #include <windows.h>
 
 #include <algorithm>
-//#include <map>
 #include <vector>
 
 #pragma warning(disable : 4996)
 
-//#define NDEBUG
-#define SCHEME_2
+#define SCHEME		1
 #define BIG_NUM		999999999
+
+#ifndef NDEBUG
+#define LOG(...) printf(__VA_ARGS__)
+#else 
+#define LOG(format,...)
+#endif  
 
 // using uint = unsigned int;
 // using uchar = unsigned char;
-
 
 // 反色处理，所有bmp类型，
 bool BmpInverse(const char* srcBmpName, const char* destBmpName, InverseMode mode/* = InverseColorTable*/)
@@ -36,7 +38,7 @@ bool BmpInverse(const char* srcBmpName, const char* destBmpName, InverseMode mod
 	// 读取文件头，bmp信息头，调色板
 	fread(&bmpFileHeader, sizeof(BITMAPFILEHEADER), 1, fpSrc);
 	fread(&bmpInfoHeader, sizeof(BITMAPINFOHEADER), 1, fpSrc);
-	fclose(fpSrc);	
+	fclose(fpSrc);
 	fpSrc = NULL;
 
 	bool ret = false;
@@ -88,11 +90,9 @@ bool Bmp16ColorInverse(const char* srcBmpName, const char* destBmpName, InverseM
 	uint bmpWidth = bmpInfoHeader.biWidth;
 	uint bmpHeight = bmpInfoHeader.biHeight;
 
-#ifndef NDEBUG
-	printf("Inverting color...\n");
-	printf("bmp file size:\t %ux%u\n", bmpWidth, bmpHeight);
-	printf("matrix size:\t %ux%u\n", mtxWidth, mtxHeight);
-#endif
+	LOG("Inverting color...\n");
+	LOG("bmp file size:\t %ux%u\n", bmpWidth, bmpHeight);
+	LOG("matrix size:\t %ux%u\n", mtxWidth, mtxHeight);
 
 	switch (inverseMode) {
 	default:
@@ -133,8 +133,8 @@ bool Bmp16ColorInverse(const char* srcBmpName, const char* destBmpName, InverseM
 	// 清理工作
 	CleanUp(&fpSrc, &clrTab, &mtxBuf, mtxHeight);
 
-	printf("Invert Successfully! %s\n", srcBmpName);
-	printf("---------------------------------------------------------------------\n");
+	LOG("Invert Successfully! %s\n", srcBmpName);
+	LOG("---------------------------------------------------------------------\n");
 	return true;
 }
 
@@ -163,11 +163,9 @@ bool Bmp256ColorInverse(const char* srcBmpName, const char* destBmpName, Inverse
 	uint bmpWidth = bmpInfoHeader.biWidth;
 	uint bmpHeight = bmpInfoHeader.biHeight;
 
-#ifndef NDEBUG
-	printf("Inverting color...\n");
-	printf("bmp file size:\t %ux%u\n", bmpWidth, bmpHeight);
-	printf("matrix size:\t %ux%u\n", mtxWidth, mtxHeight);
-#endif
+	LOG("Inverting color...\n");
+	LOG("bmp file size:\t %ux%u\n", bmpWidth, bmpHeight);
+	LOG("matrix size:\t %ux%u\n", mtxWidth, mtxHeight);
 
 	switch (inverseMode) {
 	default:
@@ -198,8 +196,8 @@ bool Bmp256ColorInverse(const char* srcBmpName, const char* destBmpName, Inverse
 	// 清理工作
 	CleanUp(&fpSrc, &clrTab, &mtxBuf, mtxHeight);
 
-	printf("Invert Successfully! %s\n", srcBmpName);
-	printf("---------------------------------------------------------------------\n");
+	LOG("Invert Successfully! %s\n", srcBmpName);
+	LOG("---------------------------------------------------------------------\n");
 	return true;
 }
 
@@ -225,11 +223,9 @@ bool Bmp24BitInverse(const char* srcBmpName, const char* destBmpName)
 	uint bmpWidth = bmpInfoHeader.biWidth;
 	uint bmpHeight = bmpInfoHeader.biHeight;
 
-#ifndef NDEBUG
-	printf("Inverting color...\n");
-	printf("bmp file size:\t %ux%u\n", bmpWidth, bmpHeight);
-	printf("matrix size:\t %ux%u\n", mtxWidth, mtxHeight);
-#endif
+	LOG("Inverting color...\n");
+	LOG("bmp file size:\t %ux%u\n", bmpWidth, bmpHeight);
+	LOG("matrix size:\t %ux%u\n", mtxWidth, mtxHeight);
 
 	// 读取数据并反色处理
 	for (uint i = 0; i < mtxHeight; ++i) {
@@ -246,8 +242,8 @@ bool Bmp24BitInverse(const char* srcBmpName, const char* destBmpName)
 
 	CleanUp(&fpSrc, nullptr, &mtxBuf, mtxHeight);
 
-	printf("Invert Successfully! %s\n", srcBmpName);
-	printf("---------------------------------------------------------------------\n");
+	LOG("Invert Successfully! %s\n", srcBmpName);
+	LOG("---------------------------------------------------------------------\n");
 	return true;
 }
 
@@ -255,10 +251,6 @@ bool Bmp24BitInverse(const char* srcBmpName, const char* destBmpName)
 // 24bit 真彩色 转为 256色
 bool Bmp24BitTo256Color(const char* srcBmpName, const char* destBmpName)
 {
-#ifndef NDEBUG
-	clock_t start = clock();
-#endif
-
 	FILE* fpSrc = fopen(srcBmpName, "rb");
 	if (!fpSrc) {
 		printf("Failed to open source file\n");
@@ -279,7 +271,7 @@ bool Bmp24BitTo256Color(const char* srcBmpName, const char* destBmpName)
 	uint pixelCount = bmpHeight * bmpWidth;		// 总像素数目
 
 	// 存储所有像素点的颜色值（取BGR值的高4位组成12bit整数）
-	uint* clrBuf = new uint[pixelCount];	
+	uint* clrBuf = new uint[pixelCount];
 	for (uint i = 0; i < mtxHeight; ++i) {
 		for (uint j = 0; j < bmpWidth; ++j) {
 			uchar bValue = mtxBuf[i][j * 3] & 0xf0;
@@ -289,22 +281,13 @@ bool Bmp24BitTo256Color(const char* srcBmpName, const char* destBmpName)
 		}
 	}
 
-#ifndef NDEBUG
-	clock_t c0 = clock();
-	printf("bmp file size:\t %ux%u\n", bmpWidth, bmpHeight);
-	printf("matrix size:\t %ux%u\n", mtxWidth, mtxHeight);
-	printf("time consuming:\n");
-	printf("\tread file:\t\t%.3f\n", double(c0 - start) / CLOCKS_PER_SEC);
-#endif
+	LOG("Converting 24bit bmp to 256 color bmp...\n");
+	LOG("bmp file size:\t %ux%u\n", bmpWidth, bmpHeight);
+	LOG("matrix size:\t %ux%u\n", mtxWidth, mtxHeight);
 
 	// 统计4096种颜色出现次数最多的前256种颜色
 	// 按颜色值从大到小排序
 	std::sort(clrBuf, clrBuf + pixelCount, [](uint x, uint y) { return x > y; });
-
-#ifndef NDEBUG
-	clock_t c1 = clock();
-	printf("\tsort clrBuf:\t\t%.3f\n", double(c1 - c0) / CLOCKS_PER_SEC);
-#endif
 
 	// 统计每种颜色出现的次数
 	std::vector<std::pair<int, int>> clrCountVec;		// pair<颜色值，出现次数>
@@ -327,22 +310,12 @@ bool Bmp24BitTo256Color(const char* srcBmpName, const char* destBmpName)
 		}
 	}
 
-#ifndef NDEBUG
-	clock_t c2 = clock();
-	printf("\tcount every color:\t%.3f\n", double(c2 - c1) / CLOCKS_PER_SEC);
-#endif
-
 	// 对clrCountVec按count值排序
 	std::sort(clrCountVec.begin(), clrCountVec.end(), [](const std::pair<int, int>& x, const std::pair<int, int>& y) { 
 		return x.second > y.second; 
 	});
 
-#ifndef NDEBUG
-	clock_t c3 = clock();
-	printf("\tsort clrCountVec:\t%.3f\n", double(c3 - c2) / CLOCKS_PER_SEC);
-#endif
-
-#if defined SCHEME_1	// 方案一  稍微慢
+#if SCHEME==1	// 方案一  稍微慢
 
 	// 将出现频率最大的256中颜色作为调色板
 	uchar clrTab[1024];		// 拆分为 R G B α
@@ -365,11 +338,6 @@ bool Bmp24BitTo256Color(const char* srcBmpName, const char* destBmpName)
 	for (int i = 0; i < mtx256ColorHeight; ++i) {
 		mtx256ColorBuf[i] = new uchar[mtx256ColorWidth];
 	}
-
-#ifndef NDEBUG
-	clock_t c4 = clock();
-	printf("\txxxxxxxxxxx:\t\t%.3f\n", double(c4 - c3) / CLOCKS_PER_SEC);
-#endif
 
 	// 分别取颜色表中颜色，与剩余颜色信息进行最小平方误差计算。
 	uint errorMin = 0;
@@ -408,12 +376,7 @@ bool Bmp24BitTo256Color(const char* srcBmpName, const char* destBmpName)
 		}
 	}
 
-#ifndef NDEBUG
-	clock_t c5 = clock();
-	printf("\tcalc error and index:\t%.3f\n", double(c5 - c4) / CLOCKS_PER_SEC);
-#endif
-
-#elif defined SCHEME_2		// 方案二：
+#elif scheme==2		// 方案二：
 
 	// 将出现频率最大的256中颜色作为调色板
 	uint clrTabUi[256];		// 调色板每种颜色rgb组成的unsigned int值
@@ -434,11 +397,6 @@ bool Bmp24BitTo256Color(const char* srcBmpName, const char* destBmpName)
 			clrTab[i * 4 + 3] = 0x0;
 		}
 	}
-
-#ifndef NDEBUG
-	clock_t c4 = clock();
-	printf("\txxxxxxxxxxx:\t\t%.3f\n", double(c4 - c3) / CLOCKS_PER_SEC);
-#endif
 
 	// 输出图像（256Color）的像素矩阵
 	uint  mtx256ColorWidth = (bmpWidth + 3) / 4 * 4;
@@ -489,11 +447,6 @@ bool Bmp24BitTo256Color(const char* srcBmpName, const char* destBmpName)
 		}
 	}
 
-#ifndef NDEBUG
-	clock_t c4_5 = clock();
-	printf("\tcalc error:\t\t%.3f\n", double(c4_5 - c4) / CLOCKS_PER_SEC);
-#endif
-
 	// 计算每个像素对应的颜色索引
 	for (uint i = 0, color = 0; i < bmpHeight; ++i) {
 		for (uint j = 0; j < bmpWidth; ++j) {
@@ -506,12 +459,7 @@ bool Bmp24BitTo256Color(const char* srcBmpName, const char* destBmpName)
 		}
 	}
 
-#ifndef NDEBUG
-	clock_t c5 = clock();
-	printf("\tcalc index:\t\t%.3f\n", double(c5 - c4_5) / CLOCKS_PER_SEC);
-#endif
-
-#endif // defined SCHEME_1
+#endif // scheme==1
 
 	// 新文件(256色位图）
 	BITMAPFILEHEADER bmp256ColorFileHeader = bmpFileHeader;
@@ -531,24 +479,10 @@ bool Bmp24BitTo256Color(const char* srcBmpName, const char* destBmpName)
 	//	NULL, 0,
 	//	mtxBuf, mtxWidth, mtxHeight);
 
-#ifndef NDEBUG
-	clock_t c6 = clock();
-	printf("\twrite to file:\t\t%.3f\n", double(c6 - c5) / CLOCKS_PER_SEC);
-#endif
-
 	CleanUp(&fpSrc, nullptr, &mtxBuf, mtxHeight, &mtx256ColorBuf, mtx256ColorHeight);
 
-#ifndef NDEBUG
-	clock_t end = clock();
-	printf("\t-----------------------------\n");
-	printf("\tTotal time-consuming:\t%.3f   ** \n", double(end - start) / CLOCKS_PER_SEC);
-	printf("-------------------------------------\n");
-	printf("Convert Successfully! %s\n", srcBmpName);
-	printf("---------------------------------------------------------------------\n");
-#else
-	printf("Convert Successfully! %s\n", srcBmpName);
-	printf("---------------------------------------------------------------------\n");
-#endif
+	LOG("Convert Successfully! %s\n", srcBmpName);
+	LOG("---------------------------------------------------------------------\n");
 
 	return true;
 }
@@ -577,11 +511,9 @@ bool Bmp256ColorTo32Bit(const char* srcBmpName, const char* destBmpName)
 	uint bmpHeight = bmpInfoHeader.biHeight;
 	uint pixelCount = bmpHeight * bmpWidth;		// 总像素数目
 
-#ifndef NDEBUG
-	printf("Converting 256 color bmp to 32bit bmp...\n");
-	printf("bmp file size:\t %ux%u\n", bmpWidth, bmpHeight);
-	printf("matrix size:\t %ux%u\n", mtxWidth, mtxHeight);
-#endif
+	LOG("Converting 256 color bmp to 32bit bmp...\n");
+	LOG("bmp file size:\t %ux%u\n", bmpWidth, bmpHeight);
+	LOG("matrix size:\t %ux%u\n", mtxWidth, mtxHeight);
 
 	// 32bit 位图
 	uint mtx32BitWidth = bmpWidth * 4;
@@ -611,10 +543,8 @@ bool Bmp256ColorTo32Bit(const char* srcBmpName, const char* destBmpName)
 
 	CleanUp(&fpSrc, &clrTab, &mtx32BitBuf, mtx32BitHeight);
 
-#ifndef NDEBUG
-	printf("Convert Successfully! %s\n", srcBmpName);
-	printf("---------------------------------------------------------------------\n");
-#endif
+	LOG("Convert Successfully! %s\n", srcBmpName);
+	LOG("---------------------------------------------------------------------\n");
 
 	return true;
 }
