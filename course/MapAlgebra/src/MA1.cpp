@@ -16,7 +16,7 @@
 #ifndef NDEBUG
 #define LOG(...) printf(__VA_ARGS__)
 #else 
-#define LOG(format,...)
+#define LOG(...)
 #endif  
 
 // using uint = unsigned int;
