@@ -45,8 +45,8 @@ void Decoder::print()
 	if (!content_)
 		return;
 
-	for (int i = 0; i < length_; ++i) 
-		putchar(content_[i]);
+	fwrite(content_, 1, length_, stdout);
+	//printf("%s", content_);
 }
 
 
@@ -107,9 +107,7 @@ bool Decoder::write(const char* fileName)
 		return false;
 	}
 
-	for (int i = 0; i < length_; ++i) {
-		fputc(content_[i], fp);
-	}
+	fwrite(content_, 1, length_, fp);
 
 	fclose(fp);
 	return true;

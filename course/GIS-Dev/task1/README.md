@@ -13,3 +13,43 @@
 + 乱序的二进制文件；
 + 1`char`+1`int`，其中`char`为原文字符，`int`为其所在位置的标示量（该标示量只标示其相对位置，非绝对位置）；
 + 根据标示量的大小升序排序，排序后即为正确结果
+
+
+
+## Method1:
+
+```C++
+struct Pair
+{
+	Pair() : 
+		character(0), index(0x7FFFFFFF) { }	// MAX_INT=0x7FFFFFFF
+	char character;
+	int index;
+};	/* 由于内存对齐，Pair占用8个字节(3个空字节) */
+
+class Decoder {
+public:
+    // ...
+private:
+    void  sort_(Pair* pair, int left, int right);	// 快速排序
+    Pair* content_;
+    int lenght_;
+};
+```
+
+
+
+## Method2
+
+```C++
+class Decoder {
+public:
+    // ...
+private:
+    void  sort_(int* intArr, char* charArr, int left, int right);	// 快速排序
+    char* content_;
+	int*  index_;
+	int	  length_;
+};
+```
+
