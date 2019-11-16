@@ -30,11 +30,6 @@ bool Decoder::decode()
 	// 排序，按照index从小到大排序
 	sort_(index_, content_, 0, length_ - 1);
 
-	//// 或者调用 std::sort()
-	//std::sort(content_, content_ + length_, [](Pair pair1, Pair pair2) {
-	//	return pair1.index < pair2.index;
-	//});
-
 	return true;
 }
 
