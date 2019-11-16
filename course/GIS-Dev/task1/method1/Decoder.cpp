@@ -3,6 +3,12 @@
 #include <cstdio>
 //#include <algorithm>
 
+#define SWAP(x, y, t) do{\
+	(t) = (x);\
+	(x) = (y);\
+	(y) = (t);\
+} while(0);
+
 
 Decoder::Decoder()
 	: content_(nullptr), length_(0)
@@ -61,13 +67,21 @@ bool Decoder::read(const char* fileName)
 	fseek(fp, 0, SEEK_END);
 	int length = ftell(fp);	
 	rewind(fp);
-	length_ = length / 5;		// char+int 一对儿，5个字节
+
+	// 文件长度必须是5的倍数
+	if (length % 5 != 0) {
+		printf("Read error! Format error!\n");
+		fclose(fp);
+		return false;
+	}
+	else {
+		length_ = length / 5;		// char+int 一对儿，5个字节
+	}
 
 	if (content_)
 		delete content_;
 	content_ = new Pair[length_ + 1];	// 有意多申请一个空间，为快速排序准备（最后一个数据的位置始终不变）
 
-	fseek(fp, 5, SEEK_SET);
 	for (int i = 0; i < length_; ++i) {
 		fread(&content_[i].character, 1, 1, fp);	// char
 		fread(&content_[i].index, 4, 1, fp);		// int
@@ -116,14 +130,11 @@ void Decoder::sort_(Pair* pair, int left, int right)
 		do (i++); while (pair[i].index < pivot);
 		do (j--); while (pair[j].index > pivot);
 		if (i < j) {
-			temp = pair[i];
-			pair[i] = pair[j];
-			pair[j] = temp;
+			SWAP(pair[i], pair[j], temp);
 		}
 	} while (i < j);
-	temp = pair[j];
-	pair[j] = pair[left];
-	pair[left] = temp;
+
+	SWAP(pair[j], pair[left], temp);
 
 	// 递归
 	sort_(pair, left, j - 1);	// 小于枢轴的部分

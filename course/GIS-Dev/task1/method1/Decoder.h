@@ -7,7 +7,7 @@ struct Pair
 		character(0), index(0x7FFFFFFF) { }	// MAX_INT=0x7FFFFFFF
 	char character;
 	int index;
-};
+};	/* 由于内存对齐，Pair占用8个字节(3个空字节) */
 
 
 class Decoder

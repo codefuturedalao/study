@@ -5,6 +5,15 @@
 
 int main() {
 	Decoder decoder;
+
+	if (decoder.read("Z:/Data/Encode1.da")) {
+		decoder.decode();
+		decoder.print();
+		decoder.write("Z:/Data/Decode1.da");
+	}
+
+	printf("\n\n----------------------------------------------\n\n");
+
 	if (decoder.read("Z:/Data/Encode2.da")) {
 		decoder.decode();
 		decoder.print();
