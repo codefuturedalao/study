@@ -13,9 +13,9 @@ Decoder::Decoder()
 Decoder::~Decoder()
 {
 	if (content_)
-		delete content_;
+		delete[] content_;
 	if (index_)
-		delete index_;
+		delete[] index_;
 }
 
 
@@ -70,9 +70,9 @@ bool Decoder::read(const char* fileName)
 	}
 
 	if (content_)
-		delete content_;
+		delete[] content_;
 	if (index_)
-		delete index_;
+		delete[] index_;
 	content_ = new char[length_ + 1];	// 有意多申请一个空间，为快速排序准备（最后一个数据的位置始终不变）
 	index_ = new int[length_ + 1];
 

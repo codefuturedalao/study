@@ -19,7 +19,7 @@ Decoder::Decoder()
 Decoder::~Decoder()
 {
 	if (content_)
-		delete content_;
+		delete[] content_;
 }
 
 
@@ -79,7 +79,7 @@ bool Decoder::read(const char* fileName)
 	}
 
 	if (content_)
-		delete content_;
+		delete[] content_;
 	content_ = new Pair[length_ + 1];	// 有意多申请一个空间，为快速排序准备（最后一个数据的位置始终不变）
 
 	for (int i = 0; i < length_; ++i) {
