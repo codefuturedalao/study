@@ -56,3 +56,32 @@ private:
 ```
 
 `content_` 和 `index_`一一对应，排序中只比较`index_`每个元素大小，但交换时，`content_` 和 `index_`都要交换。
+
+
+
+## [PS]
+
+对于内置类型（`POD类型`，如int，char，double、自己定义的符合POD类型的结构体和类，等等），`delete`和`delete[]`没有区别。对于需要析构的结构体、类来说，`delete`只对第一个元素调用**析构函数**，` delete[]` 则会对所有元素调用析构函数。 
+
+```C++
+int* pInt = new int[128];
+delete pInt;	// OK
+delete[] pInt;	// OK
+
+// ---------------------------------------------------
+
+class MyClass {
+public:
+    MyClass() { pInt = new int; }
+    ~MyClass() { if (pInt) delete pInt; }
+private:
+    int* pInt;
+};
+
+MyClass* pMyClass = new MyClass[128];
+delete pMyClass;	// Error
+delete[] pMyClass;	// OK
+```
+
+不过为了统一，无论什么类型，`new`和`delete`配对，`new[]`和`delete[]`配对，就能避免错误。
+
