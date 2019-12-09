@@ -2,15 +2,18 @@
 
 #include <windows.h>
 #include <cstdio>
+#include <iostream>
 
 using uint  = unsigned int;
 using uchar = unsigned char;
 
+#define LogF(fmt, ...) printf(##fmt"(%s)<%d> <%s>\n", ##__VA_ARGS__, __FILE__, __LINE__, __FUNCTION__) 
+#define Log(x) std::cout << x << " (" << __FILE__ << ")<" << __LINE__ << "> <" << __FUNCTION__ << ">" << std::endl;
 
 class Bmp 
 {
 public:
-	Bmp();
+	Bmp() {}
 	Bmp(uint bitCount, uint biWidth, uint biHeight);
 	Bmp(const Bmp& rhs);
 	~Bmp();
@@ -21,8 +24,9 @@ public:
 	uint height() const { return infoHeader.biHeight; }
 	uint bitCount() const { return infoHeader.biBitCount; }
 
-	bool copyMtxTo(uchar*** destMtx, uint* destMtxWidht, uint* destMtxHeight);		// 拷贝mtx到destMtx
-	bool copyMtxFrom(uchar** destMtx, uint destMtxWidht, uint destMtxHeight);		// 拷贝mtx到destMtx
+	bool copyMtxTo(uchar*** destMtx, uint* destMtxWidth, uint* destMtxHeight);		// 拷贝this->mtx到destMtx
+	bool copyMtxFrom(uchar** srcMtx, uint destMtxWidth, uint destMtxHeight);		// 拷贝srcMtx到this->mtx
+	bool copyClrTabFrom(uchar* srcClrTab, uint size);		// 拷贝srcClrTab到this->clrTab
 
 public:
 	BITMAPFILEHEADER fileHeader;

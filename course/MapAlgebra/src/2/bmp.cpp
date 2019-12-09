@@ -7,12 +7,6 @@
 // using uint  = unsigned int;
 // using uchar = unsigned char;
 
-
-Bmp::Bmp() {
-
-}
-
-
 Bmp::Bmp(uint bitCount, uint biWidth, uint biHeight) :
 	clrTabSize(getClrTabSize_(bitCount)),
 	mtxWidth(getMtxWidth_(bitCount, biWidth)),
@@ -50,7 +44,7 @@ Bmp::Bmp(const Bmp& rhs) :
 
 	if (rhs.mtx) {
 		mtx = new uchar*[mtxHeight];
-		for (uint i = 0; i < mtxWidth; ++i) {
+		for (uint i = 0; i < mtxHeight; ++i) {
 			mtx[i] = new uchar[mtxWidth];
 			for (uint j = 0; j < mtxWidth; ++j) {
 				mtx[i][j] = rhs.mtx[i][j];
@@ -61,6 +55,7 @@ Bmp::Bmp(const Bmp& rhs) :
 		mtx = nullptr;
 	}
 }
+
 
 
 // 析构函数
@@ -151,10 +146,10 @@ bool Bmp::copyMtxFrom(uchar** srcMtx, uint srcMtxWidth, uint srcMtxHeight)
 		return false;
 
 	if (mtx) {
-		if (srcMtxWidth != mtxWidth || srcMtxHeight != mtxHeight)
+		if (srcMtxWidth > mtxWidth || srcMtxHeight > mtxHeight)
 			return false;
 		for (uint i = 0; i < mtxHeight; ++i)
-			std::copy(srcMtx[i], srcMtx[i] + mtxWidth, mtx[i]);
+			std::copy(srcMtx[i], srcMtx[i] + srcMtxWidth, mtx[i]);
 	}
 	else {
 		mtxWidth = srcMtxWidth;
@@ -165,17 +160,36 @@ bool Bmp::copyMtxFrom(uchar** srcMtx, uint srcMtxWidth, uint srcMtxHeight)
 			std::copy(srcMtx[i], srcMtx[i] + mtxWidth, mtx[i]);
 		}
 	}
+
+	return true;
 }
 
 
+bool Bmp::copyClrTabFrom(uchar* srcClrTab, uint size)
+{
+	if (!(srcClrTab && size > 0))
+		return false;
+
+	if (!clrTab) {
+		clrTabSize = size;
+		clrTab = new uchar[clrTabSize];
+	}
+	else if (size != clrTabSize) {
+		return false;
+	}
+
+	memcpy(clrTab, srcClrTab, size);
+	return true;
+}
+
 // 拷贝mtx到destMtx
-bool Bmp::copyMtxTo(uchar*** destMtx, uint* destMtxWidht, uint* destMtxHeight)
+bool Bmp::copyMtxTo(uchar*** destMtx, uint* destMtxWidth, uint* destMtxHeight)
 {
 	if (!mtx || !destMtx || (*destMtx))	// *destMtx 必须为 nullptr
 		return false;
 
-	if (destMtxWidht)
-		*destMtxWidht = mtxWidth;
+	if (destMtxWidth)
+		*destMtxWidth = mtxWidth;
 	if (destMtxHeight)
 		*destMtxHeight = mtxHeight;
 
@@ -228,7 +242,7 @@ uint Bmp::getClrTabSize_(uint biCount) const
 }
 
 
-// 根据biCont和biWidht获取mtxWidth
+// 根据biCont和biWidth获取mtxWidth
 uint Bmp::getMtxWidth_(uint biCount, uint biWidth) const
 {
 	uint ret = 0;
@@ -260,6 +274,7 @@ uint Bmp::getMtxWidth_(uint biCount, uint biWidth) const
 }
 
 
+// 根据biCount 和 biWidth, biHeight
 // 校正infoHeader 和 fileHeader (调整为合适大小)
 void Bmp::headerFit_(uint biCount, uint biWidth, uint biHeight)
 {
@@ -278,6 +293,8 @@ void Bmp::headerFit_(uint biCount, uint biWidth, uint biHeight)
 	infoHeader.biSizeImage = mtxWidth * mtxHeight;
 }
 
+
+/**********************************************************************************************/
 
 
 // 灰度化
